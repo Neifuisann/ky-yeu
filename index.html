@@ -763,6 +763,31 @@
         .student-info, .overlay {
             display: none;
         }
+
+        .confirm-button {
+            background: #ffffff;
+            color: #2196F3;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .confirm-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            background: #f8f9fa;
+        }
+
+        .confirm-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -793,6 +818,7 @@
                     </div>
                 </div>
             </div>
+            <button class="confirm-button">Đã hiểu, vào lớp thôi!</button>
         </div>
     </div>
 
@@ -892,7 +918,7 @@
             { id: 13, name: "Nguyễn Thị Phương Nhã", age: 15, grade: "Tia cọng tươi 1", seatNumber: 35, photo: "photos/13.jpg" },
             { id: 10, name: "Nguyễn Cẩm Ngân", age: 15, grade: "Tia cọng tươi 2", seatNumber: 36, photo: "photos/10.jpg" },
             { id: 24, name: "Nguyễn Ngọc Trầm", age: 15, grade: "Đồng mười", seatNumber: 37, photo: "photos/24.jpg" },
-            { id: 36, name: "Đào Huỳnh Gia Huy", age: 15, grade: "Có giải III cấp khu vực miền Nam", seatNumber: 38, photo: "photos/36.jpg" }, 
+            { id: 36, name: "Đào Huỳnh Gia Huy", age: 15, grade: "Code web này 1500 dòng!", seatNumber: 38, photo: "photos/36.jpg" }, 
             { id: 14, name: "Nguyễn Huỳnh Như", age: 15, grade: "Gà Bông 1", seatNumber: 39, photo: "photos/14.jpg" },
             { id: 38, name: "Nguyễn Nhật Minh", age: 15, grade: "Gà Bông 2 kiêm chủ trại hòm", seatNumber: 40, photo: "photos/38.jpg" },   
             { id: 21, name: "Huỳnh Thị Anh Thư", age: 16, grade: "Linda", seatNumber: 41, photo: "photos/21.jpg" },
@@ -1200,7 +1226,12 @@
             const photo = document.createElement('div');
             photo.className = 'hover-photo';
             const img = document.createElement('img');
-            img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+            img.src = "photos/co.jpg";
+            img.alt = "Cô Nguyễn Thị Thanh Huyền";
+            img.onerror = function() {
+                this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+                console.log('Teacher photo failed to load');
+            };
             photo.appendChild(img);
             
             const info = document.createElement('div');
@@ -1424,16 +1455,16 @@
         // Add loading screen handler
         window.addEventListener('load', () => {
             const loadingScreen = document.querySelector('.loading-screen');
+            const confirmButton = document.querySelector('.confirm-button');
             
-            // Hide loading screen after 3 seconds
-            setTimeout(() => {
+            // Only hide loading screen when confirm button is clicked
+            confirmButton.addEventListener('click', () => {
                 loadingScreen.classList.add('hide');
-            }, 3000);
-
-            // Remove from DOM after transition
-            setTimeout(() => {
-                loadingScreen.remove();
-            }, 3500);
+                // Remove from DOM after transition
+                setTimeout(() => {
+                    loadingScreen.remove();
+                }, 500);
+            });
         });
 
         // Initialize the classroom
