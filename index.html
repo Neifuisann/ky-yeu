@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Modern Classroom Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            padding-top: 0;
+        }
+
+        h1 {
+            display: none;
+        }
+
+        .classroom-container {
+            perspective: 2000px;
+            margin: 0 auto;
+            max-width: 1200px;
+            user-select: none;
+            transform-origin: center 0%;
+            margin-top: -8rem;
+        }
+
+        .classroom {
+            transform-style: preserve-3d;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 2rem;
+            transition: transform 0.1s ease;
+            position: relative;
+        }
+
+        .teacher-area {
+            grid-column: 1;
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e1e5eb;
+            color: #666;
+            font-size: 0.9rem;
+            position: relative;
+            transform-style: preserve-3d;
+            height: 100px;
+        }
+
+        .blackboard {
+            grid-column: 2 / 4;
+            background: #2c3e50;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.9rem;
+            position: relative;
+            transform-style: preserve-3d;
+            height: 100px;
+        }
+
+        .door {
+            grid-column: 4;
+            background: #8b4513;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.9rem;
+            position: relative;
+            transform-style: preserve-3d;
+            height: 100px;
+        }
+
+        .desk {
+            height: 100px;
+            background: #ffffff;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            color: #666;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+
+        .desk::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: #e1e5eb;
+            bottom: -30px;
+            left: 0;
+            transform: rotateX(-90deg);
+            transform-origin: top;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .desk::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: #f0f2f5;
+            right: -30px;
+            top: 0;
+            transform: rotateY(90deg);
+            transform-origin: left;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .desk .side-left {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: #f0f2f5;
+            left: -30px;
+            top: 0;
+            transform: rotateY(-90deg);
+            transform-origin: right;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .desk .side-back {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #f8fafc;
+            transform: translateZ(-30px);
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+        }
+
+        .seat {
+            width: 45%;
+            height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e1e5eb;
+            border-radius: 6px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-style: preserve-3d;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .seat::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 15px;
+            background: #e1e5eb;
+            bottom: -15px;
+            left: 0;
+            transform: rotateX(-90deg);
+            transform-origin: top;
+            border-radius: 0 0 6px 6px;
+            opacity: 0.5;
+        }
+
+        .seat::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 100%;
+            background: #f0f2f5;
+            right: -15px;
+            top: 0;
+            transform: rotateY(90deg);
+            transform-origin: left;
+            border-radius: 0 6px 6px 0;
+            opacity: 0.5;
+        }
+
+        .seat .side-left {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 100%;
+            background: #f0f2f5;
+            left: -15px;
+            top: 0;
+            transform: rotateY(-90deg);
+            transform-origin: right;
+            border-radius: 6px 0 0 6px;
+            opacity: 0.5;
+        }
+
+        .seat .side-back {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            transform: translateZ(-15px);
+            border: 2px solid #e1e5eb;
+            border-radius: 6px;
+            opacity: 0.8;
+        }
+
+        .seat.occupied {
+            background: #ebf5ff;
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+
+        .desk:hover {
+            transform: translateZ(20px);
+        }
+
+        .desk:hover .seat:not(.occupied):hover {
+            transform: translateZ(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+
+        .seat.occupied:hover {
+            transform: translateZ(10px);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.1),
+                0 0 0 2px #2196F3;
+        }
+
+        .hover-card {
+            position: absolute;
+            width: 280px;
+            background: white;
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                0 0 0 4px rgba(33, 150, 243, 0.1);
+            left: 50%;
+            bottom: 120%;
+            transform: translateX(-50%) translateY(20px) rotateX(-60deg) scale(0.8);
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out;
+            z-index: 100;
+            pointer-events: none;
+            transform-origin: bottom center;
+            transform-style: preserve-3d;
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e1e5eb;
+            backdrop-filter: blur(10px);
+            overflow: visible;
+            will-change: transform, opacity;
+        }
+
+        .seat:hover .hover-card,
+        .hover-card:hover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0) rotateX(-60deg) scale(1);
+            pointer-events: auto;
+        }
+
+        .hover-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            overflow: visible;
+            border: 2px solid #e1e5eb;
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.1),
+                0 0 0 4px rgba(33, 150, 243, 0.1);
+            transform: translateZ(5px);
+            animation: float 3s ease-in-out infinite;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            position: relative;
+            z-index: 200;
+        }
+
+        .hover-photo:hover {
+            transform: translateZ(30px) scale(2);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                0 0 0 4px rgba(33, 150, 243, 0.2);
+        }
+
+        .hover-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: inherit;
+        }
+
+        .hover-photo:hover img {
+            transform: scale(1.1);
+        }
+
+        .hover-info {
+            flex: 1;
+            transform: translateZ(2px);
+            animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hover-info h3 {
+            color: #1a1a1a;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            animation: fadeSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .hover-info p {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 0.125rem 0;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+            animation: fadeSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .hover-info p:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .hover-info p:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateZ(5px) translateY(0px);
+            }
+            50% {
+                transform: translateZ(5px) translateY(-5px);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px) translateZ(2px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateZ(2px);
+            }
+        }
+
+        .student-info {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            width: 400px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .student-info.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .student-info h2 {
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .student-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            margin: 0 auto 1.5rem;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .student-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e1e5eb;
+            color: #4a5568;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hover-card-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform-style: preserve-3d;
+            transform: translateZ(1px);
+            position: relative;
+        }
+
+        .dust-particle {
+            display: none;
+        }
+
+        @keyframes gatherDust {
+            0%, 100% {
+                opacity: 0;
+            }
+        }
+
+        /* Exclamation Mark Animation */
+        .exclamation-mark {
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%) translateY(0) rotateX(-60deg);
+            font-size: 36px;
+            color: #ff4444;
+            animation: floatMechanical 2s ease-in-out infinite;
+            z-index: 10;
+            pointer-events: none;
+            font-weight: bold;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.2),
+                0 0 0 2px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(180deg, #ff6b6b 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 10px;
+            transform-style: preserve-3d;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        @keyframes floatMechanical {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0) rotateX(-60deg);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-15px) rotateX(-60deg);
+            }
+        }
+
+        .teacher-area:hover .exclamation-mark,
+        .blackboard:hover .exclamation-mark,
+        .door:hover .exclamation-mark {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(10px) rotateX(-60deg);
+        }
+
+        /* Add hover card visibility rules */
+        .teacher-area:hover .hover-card,
+        .blackboard:hover .hover-card,
+        .door:hover .hover-card {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0) rotateX(-60deg) scale(1);
+        }
+
+        .teacher-area:hover .hover-card::before,
+        .blackboard:hover .hover-card::before,
+        .door:hover .hover-card::before {
+            opacity: 0.5;
+        }
+
+        /* Landscape and PC Reminder */
+        .device-reminder {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .device-reminder.show {
+            display: flex;
+        }
+
+        .device-reminder-content {
+            max-width: 400px;
+            background: #2196F3;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .device-reminder-content h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .device-reminder-content p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .device-reminder-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (orientation: portrait) and (max-width: 768px) {
+            .device-reminder {
+                display: flex;
+            }
+        }
+
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(33, 150, 243, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: white;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        .loading-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        .controls-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-icon {
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 25px;
+        }
+
+        .control-text {
+            text-align: left;
+            flex: 1;
+        }
+
+        .control-text h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .control-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading-content > * {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .controls-list > *:nth-child(1) { animation-delay: 0.2s; }
+        .controls-list > *:nth-child(2) { animation-delay: 0.4s; }
+        .controls-list > *:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Remove student info form styles */
+        .student-info, .overlay {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-title">Chào mừng đến lớp 12A1 nè!!!</div>
+            <div class="controls-list">
+                <div class="control-item">
+                    <div class="control-icon">🖱️</div>
+                    <div class="control-text">
+                        <h3>Chuột giữa + kéo</h3>
+                        <p>Giữ chuột giữa và kéo để xoay lớp học</p>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <div class="control-icon">⚙️</div>
+                    <div class="control-text">
+                        <h3>Cuộn chuột</h3>
+                        <p>Cuộn chuột để phóng to và thu nhỏ</p>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <div class="control-icon">👆</div>
+                    <div class="control-text">
+                        <h3>Di chuột</h3>
+                        <p>Di chuyển chuột vào ghế để xem nè</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Modern Classroom Layout</h1>
+        <div class="classroom-container">
+            <div class="classroom">
+                <div class="teacher-area">Giáo Viên</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+    <div class="student-info">
+        <h2>Student Information</h2>
+        <div class="student-photo">
+            <img id="student-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E" alt="Student photo">
+        </div>
+        <form id="student-form">
+            <input type="hidden" id="seat-number">
+            <div class="form-group">
+                <label for="photo-upload">Photo</label>
+                <input type="file" id="photo-upload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" required>
+            </div>
+            <div class="form-group">
+                <label for="grade">Grade</label>
+                <input type="text" id="grade" required>
+            </div>
+            <div class="form-group">
+                <label for="interests">Interests</label>
+                <textarea id="interests" rows="3" required></textarea>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary" onclick="closeStudentInfo()">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Add device reminder -->
+    <div class="device-reminder">
+        <div class="device-reminder-content">
+            <div class="device-reminder-icon">💻</div>
+            <h2>Hãy để màn hình hướng ngang nhé</h2>
+            <p>Lớp học này hoạt động tốt nhất trên:</p>
+            <p>✓ Máy tính bảng hoặc laptop</p>
+            <p>✓ Máy tính bảng trong chế độ hướng ngang</p>
+            <p>Vui lòng xoay thiết bị hoặc sử dụng máy tính để có trải nghiệm tốt nhất.</p>
+        </div>
+    </div>
+
+    <script>
+        // Sample student data with added photo property
+        let students = [
+            { id: 41, name: "Lã Quý Tâm", age: 15, grade: "Yếu Văn Hoá", seatNumber: 1, photo: null },
+            { id: 34, name: "Nguyễn Văn Hậu", age: 15, grade: "Mồ hôi như tắm", seatNumber: 2, photo: null },
+            { id: 19, name: "Nguyễn Thị Mai Thanh", age: 15, grade: "Book Lover", seatNumber: 3, photo: null },
+            { id: 1, name: "Nguyễn Lê Phương Anh", age: 15, grade: "Fan T1 20 năm", seatNumber: 4, photo: null },
+            { id: 33, name: "Nguyễn Hồ Thanh Đông", age: 15, grade: "cổ áo vắt ngược", seatNumber: 5, photo: null },
+            { id: 32, name: "Võ Quốc Duy", age: 15, grade: "Tên Duy thích bán cá", seatNumber: 6, photo: null },
+            { id: 39, name: "Trần Thanh Phú", age: 15, grade: "GK +8 2 chân 1-3", seatNumber: 7, photo: null },
+            { id: 42, name: "Nguyễn Quốc Thắng", age: 15, grade: "Cười nhiều hơn điểm hoá của Phúc", seatNumber: 8, photo: null },
+            { id: 8, name: "Nguyễn Thị Hà Linh", age: 16, grade: "Sleep god", seatNumber: 9, photo: null },
+            { id: 3, name: "Lê Thị Ngọc Hân", age: 15, grade: "Đối nghịch T1", seatNumber: 11, photo: null },
+            { id: 26, name: "Lê Cát Tường", age: 15, grade: "Nhà có thằng em tên Tân", seatNumber: 12, photo: null },
+            { id: 28, name: "Hồ Phương Uyên", age: 15, grade: "Book Lover 2", seatNumber: 13, photo: null },
+            { id: 12, name: "Phạm Thị Thu Ngân", age: 15, grade: "Book Lover 3", seatNumber: 14, photo: null },
+            { id: 3, name: "Nguyễn Thị Ngọc Hân (A)", age: 15, grade: "no cmt", seatNumber: 15, photo: null },
+            { id: 23, name: "Nguyễn Thị Cẩm Tiên", age: 15, grade: "Miss Grand Thân thiện", seatNumber: 16, photo: null },
+            { id: 25, name: "Trần Thị Kim Trang", age: 15, grade: "Múa nghệ", seatNumber: 17, photo: null },
+            { id: 17, name: "Lê Ngọc Phụng", age: 15, grade: "Coi TFT vì idol", seatNumber: 19, photo: null },
+            { id: 40, name: "Nguyễn Ngọc Hoàng Phúc", age: 15, grade: "Friend with Toilet", seatNumber: 20, photo: null },
+            { id: 18, name: "Lê Nguyễn Như Quỳnh", age: 15, grade: "Sĩ quan tương lai", seatNumber: 21, photo: null },
+            { id: 16, name: "Nguyễn Trần Hồng Phúc", age: 15, grade: "Eyes Everywhere", seatNumber: 22, photo: null },
+            { id: 6, name: "Nguyễn Thị Thu Hương", age: 15, grade: "Bước vào store không cần nhìn giá", seatNumber: 23, photo: null },
+            { id: 9, name: "Ngô Hoài Thảo Ngân", age: 15, grade: "Anh Lân đẹp trai wa", seatNumber: 24, photo: null },
+            { id: 11, name: "Nguyễn Thị Tuyết Ngân", age: 16, grade: "Quậy", seatNumber: 25, photo: null },
+            { id: 20, name: "Nguyễn Huỳnh Thi", age: 15, grade: "Tương lai làm chủ tiệm vàng", seatNumber: 27, photo: null },
+            { id: 22, name: "Trần Thanh Thuỷ", age: 15, grade: "Lớp phó phong trào xịn", seatNumber: 28, photo: null },
+            { id: 35, name: "Nguyễn Huy Hoàng", age: 15, grade: "Năm nay trai tài gái sắc", seatNumber: 29, photo: null },
+            { id: 27, name: "Lê Thị Tú Uyên", age: 15, grade: "Luỵ Người tên V", seatNumber: 30, photo: null },
+            { id: 5, name: "Nguyễn Huỳnh Hương", age: 15, grade: "Đá cầu đỉnh", seatNumber: 31, photo: null },
+            { id: 30, name: "Mai Tường Vy", age: 15, grade: "Ly mì bồ Vy đâu?", seatNumber: 32, photo: null },
+            { id: 15, name: "Cao Thanh Như", age: 15, grade: "Đèn pha ôtô", seatNumber: 33, photo: null },
+            { id: 13, name: "Nguyễn Thị Phương Nhã", age: 15, grade: "Tia cọng tươi 1", seatNumber: 35, photo: null },
+            { id: 10, name: "Nguyễn Cẩm Ngân", age: 15, grade: "Tia cọng tươi 2", seatNumber: 36, photo: null },
+            { id: 24, name: "Nguyễn Ngọc Trầm", age: 15, grade: "Đồng mười", seatNumber: 37, photo: null },
+            { id: 36, name: "Đào Huỳnh Gia Huy", age: 15, grade: "Có giải III cấp khu vực miền Nam", seatNumber: 38, photo: null },
+            { id: 14, name: "Nguyễn Huỳnh Như", age: 15, grade: "Gà Bông 1", seatNumber: 39, photo: null },
+            { id: 38, name: "Nguyễn Nhật Minh", age: 15, grade: "Gà Bông 2 kiêm chủ trại hòm", seatNumber: 40, photo: null },
+            { id: 21, name: "Huỳnh Thị Anh Thư", age: 16, grade: "Linda", seatNumber: 41, photo: null },
+            { id: 4, name: "Nguyễn Thị Ngọc Hân(B)", age: 15, grade: "Bánh xe bò", seatNumber: 42, photo: null },
+            { id: 29, name: "Lê Nguyễn Thảo Vy", age: 15, grade: "No cmt", seatNumber: 45, photo: null },
+            { id: 7, name: "Niffle Alice-Lan", age: 15, grade: "Artist với kèo hadilao 7.5", seatNumber: 46, photo: null },
+            { id: 37, name: "Nguyễn Duy Khánh", age: 15, grade: "Cái áo khoác bí ẩn", seatNumber: 47, photo: null },
+            { id: 31, name: "Đỗ Nhật Bằng", age: 15, grade: "no cmt", seatNumber: 48, photo: null }
+        ];
+
+        const classroom = document.querySelector('.classroom');
+        const studentInfo = document.querySelector('.student-info');
+        const overlay = document.querySelector('.overlay');
+        const studentForm = document.getElementById('student-form');
+        const photoUpload = document.getElementById('photo-upload');
+        const studentImage = document.getElementById('student-image');
+        const totalDesks = 24;
+        const totalSeats = totalDesks * 2;
+
+        let isRotating = false;
+        let startX = 0;
+        let startY = 0;
+        let rotationX = 45;
+        let rotationZ = -45;
+        let scale = 1;
+
+        // Handle zoom with scroll
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                scale = Math.min(scale * 1.1, 2);
+            } else {
+                scale = Math.max(scale * 0.9, 0.5);
+            }
+            updateClassroomTransform();
+        }, { passive: false });
+
+        function updateClassroomTransform() {
+            classroom.style.transform = `rotateX(${rotationX}deg) rotateZ(${rotationZ}deg) scale(${scale})`;
+        }
+
+        // Initial transform
+        updateClassroomTransform();
+
+        // Add rotation controls
+        document.addEventListener('mousedown', (e) => {
+            if (e.button === 1) { // Middle mouse button
+                e.preventDefault();
+                isRotating = true;
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isRotating) {
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                rotationZ += deltaX * 0.5;
+                rotationX = Math.max(0, Math.min(80, rotationX - deltaY * 0.5));
+                
+                updateClassroomTransform();
+                
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isRotating = false;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            isRotating = false;
+        });
+
+        // Prevent context menu on middle click
+        document.addEventListener('contextmenu', (e) => {
+            if (e.button === 1) {
+                e.preventDefault();
+            }
+        });
+
+        // Add touch controls for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        classroom.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                touchStartX = (touch1.clientX + touch2.clientX) / 2;
+                touchStartY = (touch1.clientY + touch2.clientY) / 2;
+                isRotating = true;
+            }
+        });
+
+        classroom.addEventListener('touchmove', (e) => {
+            if (isRotating && e.touches.length === 2) {
+                e.preventDefault();
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const touchX = (touch1.clientX + touch2.clientX) / 2;
+                const touchY = (touch1.clientY + touch2.clientY) / 2;
+
+                const deltaX = touchX - touchStartX;
+                const deltaY = touchY - touchStartY;
+
+                rotationZ += deltaX * 0.5;
+                rotationX = Math.max(0, Math.min(80, rotationX - deltaY * 0.5));
+
+                updateClassroomTransform();
+
+                touchStartX = touchX;
+                touchStartY = touchY;
+            }
+        });
+
+        classroom.addEventListener('touchend', () => {
+            isRotating = false;
+        });
+
+        function createClassroom() {
+            // Clear existing desks
+            classroom.innerHTML = '';
+
+            // Add teacher area, blackboard, and door
+            const teacherArea = document.createElement('div');
+            teacherArea.className = 'teacher-area';
+            teacherArea.textContent = "Info Giáo Viên";
+            addTeacherHoverCard(teacherArea);
+            classroom.appendChild(teacherArea);
+
+            const blackboard = document.createElement('div');
+            blackboard.className = 'blackboard';
+            blackboard.textContent = 'Bảng Hoạt Động';
+            addBlackboardHoverCard(blackboard);
+            classroom.appendChild(blackboard);
+
+            const door = document.createElement('div');
+            door.className = 'door';
+            door.textContent = 'Cái Cửa';
+            addDoorHoverCard(door);
+            classroom.appendChild(door);
+
+            const hiddenSeats = [10, 18, 26, 34, 43, 44];
+
+            // Create desks with two seats each
+            for (let i = 0; i < totalDesks; i++) {
+                const desk = document.createElement('div');
+                desk.className = 'desk';
+
+                // Add desk sides
+                const sideLeft = document.createElement('div');
+                sideLeft.className = 'side-left';
+                desk.appendChild(sideLeft);
+
+                const sideBack = document.createElement('div');
+                sideBack.className = 'side-back';
+                desk.appendChild(sideBack);
+
+                // Create left seat
+                const leftSeat = document.createElement('div');
+                leftSeat.className = 'seat';
+                const leftSeatNumber = i * 2 + 1;
+                const leftStudent = students.find(s => s.seatNumber === leftSeatNumber);
+                if (!hiddenSeats.includes(leftSeatNumber)) {
+                    leftSeat.textContent = leftStudent ? leftStudent.id : leftSeatNumber;
+                }
+                leftSeat.setAttribute('data-seat-number', leftSeatNumber);
+
+                // Add seat sides
+                const leftSeatSideLeft = document.createElement('div');
+                leftSeatSideLeft.className = 'side-left';
+                leftSeat.appendChild(leftSeatSideLeft);
+
+                const leftSeatSideBack = document.createElement('div');
+                leftSeatSideBack.className = 'side-back';
+                leftSeat.appendChild(leftSeatSideBack);
+
+                // Create right seat
+                const rightSeat = document.createElement('div');
+                rightSeat.className = 'seat';
+                const rightSeatNumber = i * 2 + 2;
+                const rightStudent = students.find(s => s.seatNumber === rightSeatNumber);
+                if (!hiddenSeats.includes(rightSeatNumber)) {
+                    rightSeat.textContent = rightStudent ? rightStudent.id : rightSeatNumber;
+                }
+                rightSeat.setAttribute('data-seat-number', rightSeatNumber);
+
+                // Add seat sides
+                const rightSeatSideLeft = document.createElement('div');
+                rightSeatSideLeft.className = 'side-left';
+                rightSeat.appendChild(rightSeatSideLeft);
+
+                const rightSeatSideBack = document.createElement('div');
+                rightSeatSideBack.className = 'side-back';
+                rightSeat.appendChild(rightSeatSideBack);
+
+                // Check if seats are occupied and add hover cards
+                if (leftStudent) {
+                    leftSeat.classList.add('occupied');
+                    leftSeat.setAttribute('data-student-id', leftStudent.id);
+                    addHoverCard(leftSeat, leftStudent);
+                }
+
+                if (rightStudent) {
+                    rightSeat.classList.add('occupied');
+                    rightSeat.setAttribute('data-student-id', rightStudent.id);
+                    addHoverCard(rightSeat, rightStudent);
+                }
+
+                desk.appendChild(leftSeat);
+                desk.appendChild(rightSeat);
+                classroom.appendChild(desk);
+            }
+        }
+
+        function addTeacherHoverCard(element) {
+            const exclamation = document.createElement('div');
+            exclamation.className = 'exclamation-mark';
+            exclamation.textContent = '!';
+            
+            // Only show if not previously hidden
+            if (!localStorage.getItem('teacher-exclamation-hidden')) {
+                element.appendChild(exclamation);
+            }
+
+            const hoverCard = document.createElement('div');
+            hoverCard.className = 'hover-card';
+            
+            const hoverContent = document.createElement('div');
+            hoverContent.className = 'hover-card-content';
+            
+            const photo = document.createElement('div');
+            photo.className = 'hover-photo';
+            const img = document.createElement('img');
+            img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+            photo.appendChild(img);
+            
+            const info = document.createElement('div');
+            info.className = 'hover-info';
+            info.innerHTML = `
+                <h3>Cô Nguyễn Thị Thanh Huyền</h3>
+                <p>Giáo viên chủ nhiệm</p>
+                <p>Cực kỳ giàu kinh nghiệm!</p>
+                <p>Có thể làm được tất cả mọi thứ!!!</p>
+            `;
+            
+            hoverContent.appendChild(photo);
+            hoverContent.appendChild(info);
+            hoverCard.appendChild(hoverContent);
+            element.appendChild(hoverCard);
+
+            addHoverCardEffect(element, hoverCard);
+        }
+
+        function addBlackboardHoverCard(element) {
+            const exclamation = document.createElement('div');
+            exclamation.className = 'exclamation-mark';
+            exclamation.textContent = '!';
+            
+            // Only show if not previously hidden
+            if (!localStorage.getItem('blackboard-exclamation-hidden')) {
+                element.appendChild(exclamation);
+            }
+
+            const hoverCard = document.createElement('div');
+            hoverCard.className = 'hover-card';
+            
+            const hoverContent = document.createElement('div');
+            hoverContent.className = 'hover-card-content';
+            
+            const info = document.createElement('div');
+            info.className = 'hover-info';
+            info.innerHTML = `
+                <h3>Hoạt động của lớp</h3>
+                <p>Giải nhất rung chuông vàng tập thể !!!</p>
+                <p>Giải Khuyến Khích múa dân vũ!</p>
+                <p>Nhất thi đua tuần 4 lần!</p>
+                <p></p>
+                <p></p>
+            `;
+            
+            hoverContent.appendChild(info);
+            hoverCard.appendChild(hoverContent);
+            element.appendChild(hoverCard);
+
+            addHoverCardEffect(element, hoverCard);
+        }
+
+        function addDoorHoverCard(element) {
+            const exclamation = document.createElement('div');
+            exclamation.className = 'exclamation-mark';
+            exclamation.textContent = '!';
+            
+            // Only show if not previously hidden
+            if (!localStorage.getItem('door-exclamation-hidden')) {
+                element.appendChild(exclamation);
+            }
+
+            const hoverCard = document.createElement('div');
+            hoverCard.className = 'hover-card';
+            
+            const hoverContent = document.createElement('div');
+            hoverContent.className = 'hover-card-content';
+            
+            const info = document.createElement('div');
+            info.className = 'hover-info';
+            info.innerHTML = `
+                <h3>Phòng B202</h3>
+                <p>Giờ học: 6:50 AM - 5:05 PM</p>
+                <p>Đi trễ thì tự giác đóng tiền!</p>
+                <p>Mỗi người bước qua của ít nhất 500 lần một năm</p>
+            `;
+            
+            hoverContent.appendChild(info);
+            hoverCard.appendChild(hoverContent);
+            element.appendChild(hoverCard);
+
+            addHoverCardEffect(element, hoverCard);
+        }
+
+        function addHoverCardEffect(element, hoverCard) {
+            // Get the element type
+            const type = element.classList.contains('teacher-area') ? 'teacher' :
+                        element.classList.contains('blackboard') ? 'blackboard' :
+                        element.classList.contains('door') ? 'door' : null;
+
+            // Simplified hover effect with permanent hiding
+            element.addEventListener('mouseenter', () => {
+                requestAnimationFrame(() => {
+                    hoverCard.style.setProperty('--x', '50%');
+                    hoverCard.style.setProperty('--y', '50%');
+                    
+                    // If it's one of our special elements with exclamation mark
+                    if (type) {
+                        const exclamation = element.querySelector('.exclamation-mark');
+                        if (exclamation) {
+                            // Store the hidden state
+                            localStorage.setItem(`${type}-exclamation-hidden`, 'true');
+                            // Remove the exclamation mark
+                            exclamation.remove();
+                        }
+                    }
+                });
+            });
+        }
+
+        function addHoverCard(seat, student) {
+            const hoverCard = document.createElement('div');
+            hoverCard.className = 'hover-card';
+            
+            const hoverContent = document.createElement('div');
+            hoverContent.className = 'hover-card-content';
+            
+            const photo = document.createElement('div');
+            photo.className = 'hover-photo';
+            const img = document.createElement('img');
+            img.src = student.photo || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+            photo.appendChild(img);
+            
+            const info = document.createElement('div');
+            info.className = 'hover-info';
+            info.innerHTML = `
+                <h3>${student.name}</h3>
+                <p>Biệt tài: ${student.grade}</p>
+            `;
+            
+            hoverContent.appendChild(photo);
+            hoverContent.appendChild(info);
+            hoverCard.appendChild(hoverContent);
+            seat.appendChild(hoverCard);
+
+            addHoverCardEffect(seat, hoverCard);
+        }
+
+        function openStudentInfo(seatNumber) {
+            const student = students.find(s => s.seatNumber === seatNumber);
+            document.getElementById('seat-number').value = seatNumber;
+            
+            if (student) {
+                document.getElementById('name').value = student.name;
+                document.getElementById('age').value = student.age;
+                document.getElementById('grade').value = student.grade;
+                document.getElementById('interests').value = student.interests;
+                if (student.photo) {
+                    studentImage.src = student.photo;
+                } else {
+                    studentImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+                }
+            } else {
+                studentForm.reset();
+                studentImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+            }
+
+            overlay.classList.add('active');
+            // Small delay to ensure overlay transition is visible before modal appears
+            setTimeout(() => {
+                studentInfo.classList.add('active');
+            }, 50);
+        }
+
+        function closeStudentInfo() {
+            studentInfo.classList.remove('active');
+            setTimeout(() => {
+                overlay.classList.remove('active');
+                studentForm.reset();
+            }, 300);
+        }
+
+        photoUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    studentImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        studentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const seatNumber = parseInt(document.getElementById('seat-number').value);
+            const studentData = {
+                id: Date.now(),
+                name: document.getElementById('name').value,
+                age: parseInt(document.getElementById('age').value),
+                grade: document.getElementById('grade').value,
+                interests: document.getElementById('interests').value,
+                seatNumber: seatNumber,
+                photo: studentImage.src
+            };
+
+            const existingStudentIndex = students.findIndex(s => s.seatNumber === seatNumber);
+            if (existingStudentIndex !== -1) {
+                students[existingStudentIndex] = studentData;
+            } else {
+                students.push(studentData);
+            }
+
+            // Update the classroom display
+            createClassroom(); // Refresh the entire classroom to update the desk
+            closeStudentInfo();
+        });
+
+        // Add loading screen handler
+        window.addEventListener('load', () => {
+            const loadingScreen = document.querySelector('.loading-screen');
+            
+            // Hide loading screen after 3 seconds
+            setTimeout(() => {
+                loadingScreen.classList.add('hide');
+            }, 3000);
+
+            // Remove from DOM after transition
+            setTimeout(() => {
+                loadingScreen.remove();
+            }, 3500);
+        });
+
+        // Initialize the classroom
+        createClassroom();
+
+        // Close modal when clicking overlay
+        overlay.addEventListener('click', closeStudentInfo);
+
+        // Add device orientation check
+        function checkOrientation() {
+            const reminder = document.querySelector('.device-reminder');
+            if (window.innerWidth < 768 || window.innerHeight > window.innerWidth) {
+                reminder.classList.add('show');
+            } else {
+                reminder.classList.remove('show');
+            }
+        }
+
+        // Check orientation on load and resize
+        window.addEventListener('load', checkOrientation);
+        window.addEventListener('resize', checkOrientation);
+    </script>
+</body>
+</html> 
