@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Modern Classroom Layout</title>
+    <title>Đây là lớp 12A1!</title>
     <style>
         * {
             margin: 0;
@@ -866,9 +866,9 @@
             { id: 33, name: "Nguyễn Hồ Thanh Đông", age: 15, grade: "cổ áo vắt ngược", seatNumber: 5, photo: null },
             { id: 32, name: "Võ Quốc Duy", age: 15, grade: "Tên Duy thích bán cá", seatNumber: 6, photo: null },
             { id: 39, name: "Trần Thanh Phú", age: 15, grade: "GK +8 2 chân 1-3", seatNumber: 7, photo: null },
-            { id: 42, name: "Nguyễn Quốc Thắng", age: 15, grade: "Cười nhiều hơn điểm hoá của Phúc", seatNumber: 8, photo: null },
+            { id: 42, name: "Nguyễn Quốc Thắng", age: 15, grade: "Cười nhiều hơn điểm hoá của Phúc", seatNumber: 8, photo: "photos/42.jpg" },
             { id: 8, name: "Nguyễn Thị Hà Linh", age: 16, grade: "Sleep god", seatNumber: 9, photo: null },
-            { id: 3, name: "Lê Thị Ngọc Hân", age: 15, grade: "Đối nghịch T1", seatNumber: 11, photo: null },
+            { id: 2, name: "Lê Thị Ngọc Hân", age: 15, grade: "Đối nghịch T1", seatNumber: 11, photo: null },
             { id: 26, name: "Lê Cát Tường", age: 15, grade: "Nhà có thằng em tên Tân", seatNumber: 12, photo: null },
             { id: 28, name: "Hồ Phương Uyên", age: 15, grade: "Book Lover 2", seatNumber: 13, photo: null },
             { id: 12, name: "Phạm Thị Thu Ngân", age: 15, grade: "Book Lover 3", seatNumber: 14, photo: null },
@@ -1322,7 +1322,18 @@
             const photo = document.createElement('div');
             photo.className = 'hover-photo';
             const img = document.createElement('img');
-            img.src = student.photo || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+            if (student.photo) {
+                // Create a full URL for the image
+                const baseUrl = window.location.origin + window.location.pathname;
+                const photoUrl = new URL(student.photo, baseUrl).href;
+                img.src = photoUrl;
+            } else {
+                img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+            }
+            img.alt = student.name;
+            img.onerror = function() {
+                this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23f0f2f5'/%3E%3Cpath d='M60 40c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z' fill='%23ccc'/%3E%3C/svg%3E";
+            };
             photo.appendChild(img);
             
             const info = document.createElement('div');
